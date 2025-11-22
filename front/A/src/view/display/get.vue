@@ -26,7 +26,7 @@ const fetchImage = async () => {
       // 处理图片路径，将相对路径转换为完整URL
       const imageDataRaw = response.data.data
       if (imageDataRaw.image_url && !imageDataRaw.image_url.startsWith('http')) {
-        // 如果是相对路径，添加后端基础URL
+        // 如果是相对路径，添加后端基础URL,数据库地址
         imageDataRaw.image_url = `http://localhost:8080${imageDataRaw.image_url}`
       }
       imageData.value = imageDataRaw

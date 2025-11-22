@@ -89,37 +89,45 @@ axios.interceptors.response.use(function (response) {
     loadingInstance.value.close()
     return Promise.reject(error);
   });
-const request = (url = '', data = {}, method = "get", timeout = 5000) => {
+const request = (url = '', data = {}, method = "get", timeout = 5000, headers = {}) => {
     console.log("使用封装函数去处理请求")
     return new Promise((resolve, reject)=>{
         console.log("使用axios请求接口")
         // GET POST 
         const methodLower = method.toLowerCase() 
-        if (methodLower === 'get') {
-            axios({
-                method: methodLower,
-                params: data,
-                timeout: timeout,
-                url: url,
-            }).then((response)=>{
-                // 能正常拿到数据
-                resolve(response)
-            }).catch((error)=>{
-                reject(error)
-            })
-        } else if (methodLower === "post") {
-            axios({
-                method: methodLower,
-                data: data,
-                timeout: timeout,
-                url: url,
-            }).then((response)=>{
-                // 能正常拿到数据
-                resolve(response)
-            }).catch((error)=>{
-                reject(error)
-            })
+        
+        // 构建请求配置
+        const config = {
+            method: methodLower,
+            timeout: timeout,
+            url: url,
+            headers: {
+                ...headers
+            }
         }
+        
+        if (methodLower === 'get') {
+            config.params = data
+        } else {
+            // 如果是文件上传，直接使用data，否则使用JSON格式
+            if (data instanceof FormData) {
+                // 文件上传，让浏览器自动设置Content-Type
+                config.data = data
+            } else {
+                config.data = data
+                // 如果不是FormData，设置默认的Content-Type
+                if (!headers['Content-Type']) {
+                    config.headers['Content-Type'] = 'application/json'
+                }
+            }
+        }
+        
+        axios(config).then((response)=>{
+            // 能正常拿到数据
+            resolve(response)
+        }).catch((error)=>{
+            reject(error)
+        })
     })
 }
 

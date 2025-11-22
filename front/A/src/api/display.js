@@ -14,3 +14,9 @@ export const getImageByIdHandler = (id) => {
     return request(`${API_CONFIG.getImageApi}/${id}`, {}, "get", 5000);
 };
 
+//上传图片
+export const uploadImageHandler = (data) => {
+    return request(API_CONFIG.uploadApi, data, "post", 30000, {
+        'Content-Type': 'multipart/form-data'
+    });
+};

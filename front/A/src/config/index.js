@@ -1,4 +1,4 @@
-// 用来放置项目的配置信息
+// 用来放置项目的配置信息，连接到后端的api接口
 console.log("获取环境变量:", import.meta.env)
 const BASE_URL = import.meta.env.VITE_BASE_URL
 export const API_CONFIG = {

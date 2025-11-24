@@ -68,7 +68,7 @@ func Update(c *gin.Context) {
 		return
 	}
 
-	logs.Info(nil, "更新图片成功，ID: %s")
+	logs.Info(nil, "更新图片成功,ID: %s")
 	c.JSON(http.StatusOK, gin.H{
 		"status":  200,
 		"message": "图片更新成功",

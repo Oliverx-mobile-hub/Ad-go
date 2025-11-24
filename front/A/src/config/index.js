@@ -10,6 +10,7 @@ export const API_CONFIG = {
     getImageApi: `${BASE_URL}/display/get`,
     updateApi: `${BASE_URL}/display/update`,
     deleteApi: `${BASE_URL}/display/delete`,
+    getAllApi: `${BASE_URL}/display/getall`,
 }
 export const CONFIG = {
     TOKEN_NAME: "Authorization"

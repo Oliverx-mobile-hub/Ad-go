@@ -51,14 +51,14 @@ func (s *MysqlStore) GetImageByID(id string) (*upload_image.UploadRequest, error
 }
 
 // GetAllImages 获取所有图片
-// func (s *MysqlStore) GetAllImages() ([]upload_image.UploadRequest, error) {
-// 	var images []upload_image.UploadRequest
-// 	err := s.DB.Find(&images).Error
-// 	if err != nil {
-// 		return nil, err
-// 	}
-// 	return images, nil
-// }
+func (s *MysqlStore) GetAllImages() ([]upload_image.UploadRequest, error) {
+	var images []upload_image.UploadRequest
+	err := s.DB.Find(&images).Error
+	if err != nil {
+		return nil, err
+	}
+	return images, nil
+}
 
 // DeleteImageByID 根据ID删除图片
 func (s *MysqlStore) DeleteImageByID(id string) error {

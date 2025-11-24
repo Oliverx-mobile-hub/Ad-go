@@ -21,6 +21,11 @@ export const displayRoutes =
             {
                 path: 'delete',
                 component: ()=> import('../view/display/delete.vue')
+            },
+            {
+                path: 'getall',
+                component: ()=> import('../view/display/getall.vue')
             }
+            
         ]
     }

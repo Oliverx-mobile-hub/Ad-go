@@ -4,14 +4,14 @@ import request from './index.js';
 
 
 
-// //获取图片列表
-// export const getImageListHandler = (id, image_url, desc) => {
-//     return request(API_CONFIG.getImageApi, { "id": id, "image_url": image_url, "desc": desc }, "get", 5000);
-// };
-
 // 根据ID获取单张图片
 export const getImageByIdHandler = (id) => {
     return request(`${API_CONFIG.getImageApi}/${id}`, {}, "get", 5000);
+};
+
+// 获取所有图片
+export const getAllImagesHandler = () => {
+    return request(API_CONFIG.getAllApi, {}, "get", 5000);
 };
 
 //上传图片
@@ -19,4 +19,9 @@ export const uploadImageHandler = (data) => {
     return request(API_CONFIG.uploadApi, data, "post", 30000, {
         'Content-Type': 'multipart/form-data'
     });
+};
+
+//更新图片
+export const updateImageHandler = (id, data) => {
+    return request(`${API_CONFIG.updateApi}/${id}`, data, "put", 5000);
 };

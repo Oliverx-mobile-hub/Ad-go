@@ -25,6 +25,11 @@ export const MENU_CONFIG = [
             index: "/display/delete",
             title: "删除图片"
         },
+        //获取所有图片
+        {
+            index: "/display/getall",
+            title: "获取所有图片"
+        },
         ]
     }
 ]

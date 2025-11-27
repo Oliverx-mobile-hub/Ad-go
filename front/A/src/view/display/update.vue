@@ -68,7 +68,7 @@ const updateImage = async () => {
       error.value = response.data?.message || '更新图片失败'
     }
   } catch (err) {
-    error.value = '网络请求失败，请检查网络连接'
+    error.value = err?.response?.data?.message || '更新图片失败'//把后端报错传过来
     console.error('更新图片失败:', err)
   } finally {
     loading.value = false
@@ -185,7 +185,7 @@ onMounted(() => {
     <div class="instructions">
       <h3>操作说明：</h3>
       <ol>
-        <li>输入要更新的图片ID,默认id为1,前端默认展示id:1的图片信息</li>
+        <li>输入要更新的图片ID,前端默认展示id:1的图片信息</li>
         <li>点击"加载信息"按钮获取当前图片信息</li>
         <li>修改图片URL和描述信息,可直接复制、粘贴</li>
         <li>点击"更新图片"按钮保存更改</li>

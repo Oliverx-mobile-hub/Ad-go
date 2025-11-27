@@ -40,7 +40,7 @@ func (s *MysqlStore) Update(req *upload_image.UploadRequest) error {
 	return s.DB.Save(req).Error
 }
 
-// GetImageByID 根据ID获取图片
+// GetImageByID 根据ID获取图片方法
 func (s *MysqlStore) GetImageByID(id string) (*upload_image.UploadRequest, error) {
 	var image upload_image.UploadRequest
 	err := s.DB.Where("id = ?", id).First(&image).Error
@@ -50,7 +50,7 @@ func (s *MysqlStore) GetImageByID(id string) (*upload_image.UploadRequest, error
 	return &image, nil
 }
 
-// GetAllImages 获取所有图片
+// GetAllImages 获取所有图片方法
 func (s *MysqlStore) GetAllImages() ([]upload_image.UploadRequest, error) {
 	var images []upload_image.UploadRequest
 	err := s.DB.Find(&images).Error
@@ -60,16 +60,7 @@ func (s *MysqlStore) GetAllImages() ([]upload_image.UploadRequest, error) {
 	return images, nil
 }
 
-// DeleteImageByID 根据ID删除图片
+// DeleteImageByID 根据ID删除图片方法
 func (s *MysqlStore) DeleteImageByID(id string) error {
 	return s.DB.Where("id = ?", id).Delete(&upload_image.UploadRequest{}).Error
-}
-
-// GetUploadRequestByID 根据ID查询图片方法
-func (s *MysqlStore) GetUploadRequestByID(id string) (*upload_image.UploadRequest, error) {
-	var req upload_image.UploadRequest
-	if err := s.DB.Where("id = ?", id).First(&req).Error; err != nil {
-		return nil, err
-	}
-	return &req, nil
 }

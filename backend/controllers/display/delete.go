@@ -1,8 +1,12 @@
 package display
 
 import (
+	"backend/config"
 	"backend/utils/logs"
+	"fmt"
 	"net/http"
+	"os"
+	"path/filepath"
 
 	"github.com/gin-gonic/gin"
 )
@@ -27,7 +31,7 @@ func DeleteImage(c *gin.Context) {
 	}
 
 	//3、检查图片是否存在
-	_, err := db.GetImageByID(id)
+	image, err := db.GetImageByID(id)
 	if err != nil {
 		logs.Error(nil, "图片不存在")
 		c.JSON(http.StatusNotFound, gin.H{
@@ -38,7 +42,7 @@ func DeleteImage(c *gin.Context) {
 		return
 	}
 
-	//4、删除图片
+	//4、删除数据库记录
 	if err := db.DeleteImageByID(id); err != nil {
 		logs.Error(nil, "删除图片失败")
 		c.JSON(http.StatusInternalServerError, gin.H{
@@ -47,6 +51,26 @@ func DeleteImage(c *gin.Context) {
 			"error":   err.Error(),
 		})
 		return
+	}
+
+	//5、删除uploads文件夹中的实际文件
+	if image.ImageURL != "" {
+		// 从URL中提取文件名，如：1.jpg
+		filename := filepath.Base(image.ImageURL)
+		fmt.Println(filename)
+		// 使用环境变量配置的uploads目录路径
+		filePath := filepath.Join(config.UploadsDir, filename)
+
+		// 检查文件是否存在并删除
+		if _, err := os.Stat(filePath); err == nil {
+			if err := os.Remove(filePath); err != nil {
+				logs.Warning(nil, "删除文件失败: "+filePath)
+			} else {
+				logs.Info(nil, "成功删除文件: "+filePath)
+			}
+		} else {
+			logs.Warning(nil, "文件不存在或无法访问: "+filePath)
+		}
 	}
 
 	logs.Info(nil, "删除图片成功")

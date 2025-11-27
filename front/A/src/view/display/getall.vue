@@ -8,6 +8,28 @@ const loading = ref(false)
 const error = ref('')
 const router = useRouter()
 
+// 获取后端基础URL，如果换服务器可以直接改地址
+const getBackendBaseUrl = () => {
+  // 从环境变量获取，如果没有则使用默认的localhost:8080
+  return import.meta.env.VITE_BACKEND_BASE_URL || 'http://localhost:8080'
+}
+
+// 处理图片URL，将相对路径转换为完整URL（仅用于缩略图显示）
+const processImageUrl = (imageUrl) => {
+  if (imageUrl && !imageUrl.startsWith('http')) {
+    // 如果是相对路径，添加后端基础URL前缀（仅用于缩略图显示）
+    const backendBaseUrl = getBackendBaseUrl()
+    return `${backendBaseUrl}${imageUrl}`
+  }
+  return imageUrl
+}
+
+// 获取数据库原始路径（用于URL显示）
+const getOriginalImageUrl = (imageUrl) => {
+  // 直接返回数据库中的原始路径，不进行拼接
+  return imageUrl
+}
+
 // 获取所有图片
 const fetchAllImages = async () => {
   loading.value = true
@@ -16,7 +38,14 @@ const fetchAllImages = async () => {
   try {
     const response = await getAllImagesHandler()
     if (response.data && response.data.status === 200) {
-      images.value = response.data.data || []
+      // 处理图片数据，缩略图使用完整URL，URL文本显示原始路径
+      images.value = (response.data.data || []).map(image => ({
+        ...image,
+        // 缩略图显示使用完整URL
+        display_url: processImageUrl(image.image_url),
+        // URL文本显示使用原始路径
+        original_url: getOriginalImageUrl(image.image_url)
+      }))
     } else {
       error.value = response.data?.message || '获取图片列表失败'
     }
@@ -27,6 +56,7 @@ const fetchAllImages = async () => {
     loading.value = false
   }
 }
+
 
 // 组件挂载时获取数据
 onMounted(() => {
@@ -65,6 +95,11 @@ const goToUpdatePage = (imageId) => {
       </div>
     </div>
 
+    <!-- 说明文字 -->
+    <div class="info-notice" style="text-align: left;">
+      默认展示id:1的图片,限定只更新id:1的数据
+    </div>
+
     <!-- 错误提示 -->
     <div v-if="error" class="error-message">
       {{ error }}
@@ -86,6 +121,7 @@ const goToUpdatePage = (imageId) => {
           <thead>
             <tr>
               <th class="col-id">ID</th>
+              <th class="col-thumbnail">缩略图</th>
               <th class="col-url">图片URL</th>
               <th class="col-desc">描述</th>
               <th class="col-actions">操作</th>
@@ -98,11 +134,21 @@ const goToUpdatePage = (imageId) => {
               class="info-row"
             >
               <td class="col-id">{{ image.id }}</td>
+              <td class="col-thumbnail">
+                <div class="thumbnail-container">
+                  <img 
+                    :src="image.display_url" 
+                    :alt="image.desc || '图片'" 
+                    class="thumbnail" 
+                    @error="$event.target.style.display='none'"
+                  >
+                </div>
+              </td>
               <td class="col-url">
                 <div class="url-container">
-                  <span class="url-text">{{ image.image_url }}</span>
+                  <span class="url-text">{{ image.original_url }}</span>
                   <button 
-                    @click="copyToClipboard(image.image_url)" 
+                    @click="copyToClipboard(image.original_url)" 
                     class="copy-btn"
                     title="复制URL"
                   >
@@ -112,13 +158,16 @@ const goToUpdatePage = (imageId) => {
               </td>
               <td class="col-desc">{{ image.desc || '-' }}</td>
               <td class="col-actions">
+                <!-- 只显示id为1的图片的更新按钮 -->
                 <button 
+                  v-if="image.id === '1'"
                   @click="goToUpdatePage(image.id)" 
                   class="update-btn"
                   title="更新图片信息"
                 >
                   更新
                 </button>
+                <span v-else class="no-update">-</span>
               </td>
             </tr>
           </tbody>
@@ -252,9 +301,38 @@ const goToUpdatePage = (imageId) => {
   text-align: center;
 }
 
+/* 缩略图列样式 */
+.col-thumbnail {
+  width: 80px;
+  text-align: center;
+}
+
+.thumbnail-container {
+  width: 60px;
+  height: 60px;
+  overflow: hidden;
+  border-radius: 4px;
+  border: 1px solid #e0e0e0;
+  background-color: #f8f9fa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.thumbnail {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: cover;
+  transition: transform 0.2s ease;
+}
+
+.thumbnail:hover {
+  transform: scale(1.1);
+}
+
 /* URL列 - 统一样式和对齐 */
 .col-url {
-  width: 65%;
+  width: 50%;
   text-align: left;
 }
 
@@ -307,6 +385,10 @@ const goToUpdatePage = (imageId) => {
   text-align: center;
 }
 
+.info-table-content th.col-thumbnail, .info-table-content td.col-thumbnail {
+  text-align: center;
+}
+
 .info-table-content th.col-url, .info-table-content td.col-url {
   text-align: left;
 }
@@ -336,6 +418,24 @@ const goToUpdatePage = (imageId) => {
   background-color: #e0a800;
 }
 
+/* 说明文字样式 */
+.info-notice {
+  background-color: #e3f2fd;
+  border: 1px solid #bbdefb;
+  border-radius: 4px;
+  padding: 12px 16px;
+  margin: 16px 0;
+  color: #1976d2;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* 无更新操作提示 */
+.no-update {
+  color: #999;
+  font-style: italic;
+}
+
 /* 响应式设计 */
 @media (max-width: 768px) {
   .header {
@@ -358,6 +458,15 @@ const goToUpdatePage = (imageId) => {
     width: auto;
   }
   
+  .col-thumbnail {
+    width: 60px;
+  }
+  
+  .thumbnail-container {
+    width: 40px;
+    height: 40px;
+  }
+  
   .col-url {
     width: auto;
   }
@@ -377,4 +486,5 @@ const goToUpdatePage = (imageId) => {
     height: auto;
   }
 }
+
 </style>

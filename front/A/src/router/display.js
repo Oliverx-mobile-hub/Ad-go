@@ -19,7 +19,15 @@ export const displayRoutes =
                 component: ()=> import('../view/display/update.vue')
             },
             {
+                path: 'update/:id',
+                component: ()=> import('../view/display/update.vue')
+            },
+            {
                 path: 'delete',
+                component: ()=> import('../view/display/delete.vue')
+            },
+            {
+                path: 'delete/:id',
                 component: ()=> import('../view/display/delete.vue')
             },
             {

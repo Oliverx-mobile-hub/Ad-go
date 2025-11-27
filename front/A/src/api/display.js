@@ -25,3 +25,8 @@ export const uploadImageHandler = (data) => {
 export const updateImageHandler = (id, data) => {
     return request(`${API_CONFIG.updateApi}/${id}`, data, "put", 5000);
 };
+
+//删除图片
+export const deleteImageHandler = (id) => {
+    return request(`${API_CONFIG.deleteApi}/${id}`, {}, "delete", 5000);
+};

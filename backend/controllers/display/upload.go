@@ -1,6 +1,7 @@
 package display
 
 import (
+	upload_image "backend/config"
 	"backend/utils/logs"
 	"fmt"
 	"os"
@@ -8,7 +9,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	upload_image "backend/config"
+	"backend/config"
 )
 
 func Upload(c *gin.Context) {
@@ -54,8 +55,8 @@ func Upload(c *gin.Context) {
 		return
 	}
 
-	//4、保存上传的文件
-	uploadDir := "./uploads"
+	//4、保存上传的文件，数据库是索引，/Users/zm/Desktop/Ad-go/backend/uploads是真实目录，两者缺一不可。
+	uploadDir := config.UploadsDir
 	if err := os.MkdirAll(uploadDir, 0755); err != nil {
 		logs.Error(nil, "创建上传目录失败")
 		c.JSON(500, gin.H{

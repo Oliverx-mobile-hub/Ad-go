@@ -9,6 +9,12 @@ const imageData = ref(null)
 const loading = ref(false)
 const error = ref(null)
 
+// 获取后端基础URL，如果换服务器可以直接改地址
+const getBackendBaseUrl = () => {
+  // 从环境变量获取，如果没有则使用默认的localhost:8080
+  return import.meta.env.VITE_BACKEND_BASE_URL || 'http://localhost:8080'
+}
+
 // 获取图片数据
 const fetchImage = async () => {
   if (!imageId.value.trim()) {
@@ -26,8 +32,9 @@ const fetchImage = async () => {
       // 处理图片路径，将相对路径转换为完整URL
       const imageDataRaw = response.data.data
       if (imageDataRaw.image_url && !imageDataRaw.image_url.startsWith('http')) {
-        // 如果是相对路径，添加后端基础URL,数据库地址
-        imageDataRaw.image_url = `http://localhost:8080${imageDataRaw.image_url}`
+        // 如果是相对路径，添加后端基础URL前缀
+        const backendBaseUrl = getBackendBaseUrl()
+        imageDataRaw.image_url = `${backendBaseUrl}${imageDataRaw.image_url}`
       }
       imageData.value = imageDataRaw
       ElMessage.success('图片获取成功')

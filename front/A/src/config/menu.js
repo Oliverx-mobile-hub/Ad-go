@@ -18,7 +18,7 @@ export const MENU_CONFIG = [
         //更新图片
         {
             index: "/display/update",
-            title: "更新图片"
+            title: "更新展示图片"
         },
         //删除图片
         {

@@ -12,6 +12,7 @@ var (
 	Port       string //服务端口号
 	Username   string //用户名
 	Password   string //密码
+	UploadsDir string //uploads目录路径
 )
 
 type ReturnDate struct {
@@ -47,6 +48,8 @@ func init() {
 	//配置用户名和密码，默认值：oliver，oliver6
 	viper.SetDefault("USERNAME", "admin")
 	viper.SetDefault("PASSWORD", "123456")
+	//配置uploads目录路径
+	viper.SetDefault("UPLOADS_DIR", "/Users/zm/Desktop/Ad-go/backend/uploads")
 	logs.Debug(nil, "开始加载配置")
 
 	//获取用户名和密码
@@ -58,6 +61,8 @@ func init() {
 	JwtExpTime = viper.GetInt64("JWT_EXP_TIME")
 	//获取端口号
 	Port = viper.GetString("PORT")
+	//获取uploads目录路径
+	UploadsDir = viper.GetString("UPLOADS_DIR")
 
 	//调试可以打印配置信息
 	logs.Debug(map[string]interface{}{"用户名": Username, "密码": Password}, "获取到程序用户名密码配置")

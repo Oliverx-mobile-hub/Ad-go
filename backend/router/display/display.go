@@ -1,4 +1,4 @@
-package edit
+package display
 
 import (
 	"backend/controllers/display"
@@ -6,14 +6,23 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// gin路由组：上传、更新图片路径
-func RegisterDisplayRoutes(g *gin.RouterGroup) {
-	displayGroup := g.Group("/display")
+// 公共路由 - 不需要认证
+func RegisterPublicDisplayRoutes(g *gin.RouterGroup) {
+	publicGroup := g.Group("/display")
 	{
-		displayGroup.POST("/upload", display.Upload)            //上传图片
-		displayGroup.GET("/getall", display.GetAllImages)       //获取所有图片
-		displayGroup.GET("/get/:id", display.GetImageByID)      //根据ID获取单张图片
-		displayGroup.PUT("/update/:id", display.Update)         //更新图片
-		displayGroup.DELETE("/delete/:id", display.DeleteImage) //删除图片
+		// 公共接口：获取图片信息，不需要认证
+		publicGroup.GET("/get/:id", display.GetImageByID) //根据ID获取单张图片
+	}
+}
+
+// 受保护路由 - 需要认证
+func RegisterProtectedDisplayRoutes(g *gin.RouterGroup) {
+	protectedGroup := g.Group("/display")
+	{
+		// 受保护接口：需要认证才能访问
+		protectedGroup.POST("/upload", display.Upload)            //上传图片
+		protectedGroup.GET("/getall", display.GetAllImages)       //获取所有图片
+		protectedGroup.PUT("/update/:id", display.Update)         //更新图片
+		protectedGroup.DELETE("/delete/:id", display.DeleteImage) //删除图片
 	}
 }

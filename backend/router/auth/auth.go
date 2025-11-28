@@ -6,10 +6,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// gin路由组的第二种写法,简洁，推荐第二种
-func RegisterAuthRoutes(g *gin.RouterGroup) {
+// 公共认证路由 - 不需要认证
+func RegisterPublicAuthRoutes(g *gin.RouterGroup) {
 	authGroup := g.Group("/auth")
 	{
+		// 公共接口：登录和登出不需要认证
 		authGroup.POST("/login", auth.Login)
 		authGroup.GET("/logout", auth.Logout)
 	}

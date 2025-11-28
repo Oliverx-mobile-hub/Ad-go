@@ -35,9 +35,9 @@ func JWTAuth(r *gin.Context) {
 	requestUrl := r.Request.URL.Path
 	logs.Debug(map[string]interface{}{"请求路径": requestUrl}, "")
 	// 不需要验证token的路径：登录、退出、静态文件
-	if requestUrl == "/api/auth/login" || requestUrl == "/api/auth/logout" || 
-	   requestUrl == "/uploads" || requestUrl == "/uploads/" ||
-	   (len(requestUrl) > 8 && requestUrl[:8] == "/uploads") {
+	if requestUrl == "/api/auth/login" || requestUrl == "/api/auth/logout" ||
+		requestUrl == "/uploads" || requestUrl == "/uploads/" ||
+		(len(requestUrl) > 8 && requestUrl[:8] == "/uploads") {
 		logs.Debug(map[string]interface{}{"请求路径": requestUrl}, "登录、退出和静态文件不需要验证token")
 		r.Next()
 		return

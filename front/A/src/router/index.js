@@ -24,6 +24,16 @@ const routes = [
         path: "/",
         component: Layout
     },
+    // 独立的图片获取路由，不需要认证和Layout
+    // {
+    //     path: "/display/get",
+    //     component: () => import('../view/display/get.vue')
+    // },
+    // 根路径直接访问get页面的快捷方式
+    // {
+    //     path: "/get",
+    //     component: () => import('../view/display/get.vue')
+    // }
 ]
 
 // 创建路由实例
@@ -39,12 +49,24 @@ router.beforeEach(
     // 2. 访问的还是login, 携带了token ==> next("/")
     // 3. 访问的不是login，但是携带了token ==> next()
     // 4. 访问的不是login，没有携带token ==> next("/login")
+    // 5. 访问的是不需要认证的公共路由 ==> next()
     // 拿到访问路径
     const toPath = to.path
     const toLogin = toPath.indexOf("/login") // 0  没有找到-1
+    
+    // 定义不需要认证的公共路由
+    const publicRoutes = ["/display/get", "/get"]
+    
+    // 判断是否为公共路由
+    const isPublicRoute = publicRoutes.includes(toPath)
+    
     // 判断本地是否有token
     const tokenStatus = window.localStorage.getItem(CONFIG.TOKEN_NAME)
-    if (toLogin == 0 && tokenStatus) {
+    
+    if (isPublicRoute) {
+        // 公共路由，直接放行
+        next()
+    } else if (toLogin == 0 && tokenStatus) {
         next("/")
     } else if (toLogin == 0 && !tokenStatus) {
         // 放行

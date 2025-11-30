@@ -6,10 +6,11 @@ export const MENU_CONFIG = [
         icon: "iconfont icon-tiaodu",
         items: [
          // 查看图片
-         {
-             index: "/display/get",
-             title: "查看图片"
-         },
+        //  {
+        //      index: "/display/get",
+        //      title: "查看图片"
+        //  },
+        
         //  上传图片
         {
             index: "/display/upload",

@@ -4,7 +4,7 @@ import request from './index.js';
 
 
 
-// 根据ID获取单张图片
+//根据ID获取单张图片,更新的时候会根据id查询图片是否存在，不能注释
 export const getImageByIdHandler = (id) => {
     return request(`${API_CONFIG.getImageApi}/${id}`, {}, "get", 5000);
 };

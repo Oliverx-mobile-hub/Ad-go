@@ -7,7 +7,7 @@ export const API_CONFIG = {
     logoutApi: `${BASE_URL}/auth/logout`,
     //image-display接口
     uploadApi: `${BASE_URL}/display/upload`,
-    getImageApi: `${BASE_URL}/display/get`,
+    getImageApi: `${BASE_URL}/display/get`,//这个不能屏蔽，更新的时候会根据id查询图片是否存在
     updateApi: `${BASE_URL}/display/update`,
     deleteApi: `${BASE_URL}/display/delete`,
     getAllApi: `${BASE_URL}/display/getall`,

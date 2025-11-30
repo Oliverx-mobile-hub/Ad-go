@@ -7,7 +7,7 @@ import (
 )
 
 // 公共路由 - 不需要认证
-func RegisterPublicDisplayRoutes(g *gin.RouterGroup) {
+func PublicDisplayRoutes(g *gin.RouterGroup) {
 	publicGroup := g.Group("/display")
 	{
 		// 公共接口：获取图片信息，不需要认证
@@ -16,7 +16,7 @@ func RegisterPublicDisplayRoutes(g *gin.RouterGroup) {
 }
 
 // 受保护路由 - 需要认证
-func RegisterProtectedDisplayRoutes(g *gin.RouterGroup) {
+func ProtectedDisplayRoutes(g *gin.RouterGroup) {
 	protectedGroup := g.Group("/display")
 	{
 		// 受保护接口：需要认证才能访问

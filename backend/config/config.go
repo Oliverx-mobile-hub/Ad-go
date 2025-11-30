@@ -48,8 +48,8 @@ func init() {
 	//配置用户名和密码，默认值：oliver，oliver6
 	viper.SetDefault("USERNAME", "admin")
 	viper.SetDefault("PASSWORD", "123456")
-	//配置uploads目录路径
-	viper.SetDefault("UPLOADS_DIR", "/Users/zm/Desktop/Ad-go/backend/uploads")
+	//配置uploads目录路径(注意！根据生产环境配置)
+	viper.SetDefault("UPLOADS_DIR", "C:\\Users\\Xyh\\Desktop\\Ad-go\\backend\\uploads")
 	logs.Debug(nil, "开始加载配置")
 
 	//获取用户名和密码

@@ -39,7 +39,7 @@ export default {
         title: '示例图片',
         description: '这是一个示例图片，点击可以跳转到目标页面',
         // 展示跳转链接，可更改
-        link: 'https://www.baidu.com'
+        link: 'http://localhost:5175/display/get'
       }
     }
   },

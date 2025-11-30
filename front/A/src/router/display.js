@@ -4,12 +4,8 @@ export const displayRoutes =
     {
         path: "/display",
         component: Layout,
-        redirect: "/display/get",
+        redirect: "/display/getall",
         children: [
-            {
-                path: 'get',
-                component: ()=> import('../view/display/get.vue')
-            },
             {
                 path: 'upload',
                 component: ()=> import('../view/display/upload.vue')

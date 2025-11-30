@@ -56,6 +56,7 @@ onMounted(() => {
 })
 </script>
 
+
 <template>
   <div class="image-display-container">
     <div class="header">

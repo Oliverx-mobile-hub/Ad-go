@@ -15,6 +15,7 @@ func main() {
 	r := gin.Default() //gin引擎
 
 	r.Use(middlerwares.CORS()) //启用CORS中间件（所有路由都需要）
+
 	logs.Info(nil, "程序启动")
 
 	// 添加静态文件服务，让前端可以访问上传的图片
